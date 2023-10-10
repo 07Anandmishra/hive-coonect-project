@@ -493,6 +493,7 @@ import { FaFilter } from 'react-icons/fa';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import CustomButton from 'components/CustomButton/CustomButton';
 import Datepickercomponent from './Datepickercomponent';
+import { ApiService } from 'hive/services/api.service';
 
 const name = [{name:'Sort', icon: <BiSort />}, {name:'Filter', icon: <FaFilter />}]
 
@@ -551,20 +552,40 @@ const TablePage = () => {
     { id: 'phone', name: 'Phone' },
   ];
 
-  const getData = async () => {
-    await axios.get('http://localhost:3000/employee')
-      .then((res) => {
-        setData(res.data);
-        console.log(res.data)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const getData = async () => {
+  //   await axios.get('http://localhost:3000/employee')
+  //     .then((res) => {
+  //       setData(res.data);
+  //       console.log(res.data)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
 
   useEffect(() => {
-    getData();
+    const apiService = new ApiService();
+
+    const fetchData = async () => {
+      try {
+        const data = await apiService.fetchData('http://localhost:3000/employee');
+        if (data) {
+          setData(data);
+          console.log(data);
+        }
+      } catch (error) {
+        console.error('There was an error!', error);
+      }
+    };
+
+    fetchData();
   }, []);
+
 
   // useEffect(() => {
   //   handleSelectChange();
@@ -582,7 +603,9 @@ const TablePage = () => {
         )
       );
       setData(filteredData);
-    } else {
+    } 
+    
+    else {
       getData(); // Reset to the original data if the search term is empty.
     }
   };
