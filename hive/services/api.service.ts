@@ -11,6 +11,7 @@ export class ApiService {
       const modifiedRequest = this.interceptor.intercept({
         method: 'GET',
         headers: {}
+        
       });
       const response = await fetch(url, modifiedRequest);
       if (!response.ok) {
